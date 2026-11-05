@@ -1,0 +1,307 @@
+{
+  "spec_version": "0.1",
+  "kind": "fixture_pilot",
+  "not_measured": [
+    "SWE-bench Verified",
+    "SWE-QA",
+    "condition B free-text briefs",
+    "live orchestrator calls",
+    "energy",
+    "multi-seed accuracy"
+  ],
+  "corpus": {
+    "n": 15,
+    "first_pass_valid": 4,
+    "valid_after_repair": 11,
+    "still_invalid": 4,
+    "cases": [
+      {
+        "id": "valid_basic",
+        "first_pass_valid": true,
+        "valid_after_repair": true,
+        "rounds": 0,
+        "first_error_codes": [],
+        "remaining_codes": []
+      },
+      {
+        "id": "valid_exec_test_tool",
+        "first_pass_valid": true,
+        "valid_after_repair": true,
+        "rounds": 0,
+        "first_error_codes": [],
+        "remaining_codes": []
+      },
+      {
+        "id": "valid_tight_budget",
+        "first_pass_valid": true,
+        "valid_after_repair": true,
+        "rounds": 0,
+        "first_error_codes": [],
+        "remaining_codes": []
+      },
+      {
+        "id": "valid_escalate",
+        "first_pass_valid": true,
+        "valid_after_repair": true,
+        "rounds": 0,
+        "first_error_codes": [],
+        "remaining_codes": []
+      },
+      {
+        "id": "unknown_tool",
+        "first_pass_valid": false,
+        "valid_after_repair": true,
+        "rounds": 1,
+        "first_error_codes": [
+          "tool.unknown:tools[0].name"
+        ],
+        "remaining_codes": []
+      },
+      {
+        "id": "privilege_exec_on_write_tool",
+        "first_pass_valid": false,
+        "valid_after_repair": true,
+        "rounds": 1,
+        "first_error_codes": [
+          "tool.privilege:tools[0].permission"
+        ],
+        "remaining_codes": []
+      },
+      {
+        "id": "steps_above_parent",
+        "first_pass_valid": false,
+        "valid_after_repair": true,
+        "rounds": 1,
+        "first_error_codes": [
+          "budget.above_parent:budgets.max_steps",
+          "budget.above_parent:budgets.max_tokens"
+        ],
+        "remaining_codes": []
+      },
+      {
+        "id": "tokens_below_steps",
+        "first_pass_valid": false,
+        "valid_after_repair": true,
+        "rounds": 1,
+        "first_error_codes": [
+          "budget.infeasible:budgets.max_tokens"
+        ],
+        "remaining_codes": []
+      },
+      {
+        "id": "no_acceptance_tests",
+        "first_pass_valid": false,
+        "valid_after_repair": false,
+        "rounds": 1,
+        "first_error_codes": [
+          "goal.acceptance_tests:goal.acceptance_tests"
+        ],
+        "remaining_codes": [
+          "goal.acceptance_tests:goal.acceptance_tests"
+        ]
+      },
+      {
+        "id": "bad_tier",
+        "first_pass_valid": false,
+        "valid_after_repair": true,
+        "rounds": 1,
+        "first_error_codes": [
+          "model.tier:model.tier"
+        ],
+        "remaining_codes": []
+      },
+      {
+        "id": "context_escape",
+        "first_pass_valid": false,
+        "valid_after_repair": false,
+        "rounds": 2,
+        "first_error_codes": [
+          "context.path:context.include[0]"
+        ],
+        "remaining_codes": [
+          "context.empty:context.include"
+        ]
+      },
+      {
+        "id": "extra_field",
+        "first_pass_valid": false,
+        "valid_after_repair": true,
+        "rounds": 1,
+        "first_error_codes": [
+          "schema.extra:rationale"
+        ],
+        "remaining_codes": []
+      },
+      {
+        "id": "aorchestra_tuple",
+        "first_pass_valid": false,
+        "valid_after_repair": false,
+        "rounds": 2,
+        "first_error_codes": [
+          "model.tier:model.tier",
+          "schema.missing:budgets",
+          "schema.missing:goal.acceptance_tests",
+          "schema.missing:return_contract",
+          "schema.missing:stop",
+          "schema.missing:verification"
+        ],
+        "remaining_codes": [
+          "schema.missing:goal.acceptance_tests"
+        ]
+      },
+      {
+        "id": "empty_goal",
+        "first_pass_valid": false,
+        "valid_after_repair": false,
+        "rounds": 1,
+        "first_error_codes": [
+          "goal.empty:goal.statement"
+        ],
+        "remaining_codes": [
+          "goal.empty:goal.statement"
+        ]
+      },
+      {
+        "id": "write_path_outside_grant",
+        "first_pass_valid": false,
+        "valid_after_repair": true,
+        "rounds": 1,
+        "first_error_codes": [
+          "tool.path:tools[0].paths[1]"
+        ],
+        "remaining_codes": []
+      }
+    ]
+  },
+  "determinism": {
+    "repeats": 100,
+    "unique_verdicts": 1,
+    "error_codes": [
+      "tool.unknown"
+    ]
+  },
+  "runtime": [
+    {
+      "task": "silent_return",
+      "harness": "A",
+      "return_accepted": true,
+      "silent_handoff": true,
+      "budget_violations": 0,
+      "tool_denials": 0,
+      "hooks_passed": 0,
+      "hooks_failed": 0,
+      "stopped": "accepted",
+      "steps_used": 2
+    },
+    {
+      "task": "silent_return",
+      "harness": "D",
+      "return_accepted": false,
+      "silent_handoff": false,
+      "budget_violations": 0,
+      "tool_denials": 0,
+      "hooks_passed": 2,
+      "hooks_failed": 0,
+      "stopped": "return_rejected",
+      "steps_used": 2
+    },
+    {
+      "task": "over_budget",
+      "harness": "A",
+      "return_accepted": null,
+      "silent_handoff": false,
+      "budget_violations": 0,
+      "tool_denials": 0,
+      "hooks_passed": 0,
+      "hooks_failed": 0,
+      "stopped": "actions_exhausted",
+      "steps_used": 3
+    },
+    {
+      "task": "over_budget",
+      "harness": "D",
+      "return_accepted": null,
+      "silent_handoff": false,
+      "budget_violations": 1,
+      "tool_denials": 0,
+      "hooks_passed": 0,
+      "hooks_failed": 0,
+      "stopped": "escalate",
+      "steps_used": 2
+    },
+    {
+      "task": "exec_not_granted",
+      "harness": "A",
+      "return_accepted": null,
+      "silent_handoff": false,
+      "budget_violations": 0,
+      "tool_denials": 0,
+      "hooks_passed": 0,
+      "hooks_failed": 0,
+      "stopped": "actions_exhausted",
+      "steps_used": 1
+    },
+    {
+      "task": "exec_not_granted",
+      "harness": "D",
+      "return_accepted": null,
+      "silent_handoff": false,
+      "budget_violations": 0,
+      "tool_denials": 1,
+      "hooks_passed": 0,
+      "hooks_failed": 0,
+      "stopped": "actions_exhausted",
+      "steps_used": 1
+    },
+    {
+      "task": "claim_on_failing_tests",
+      "harness": "A",
+      "return_accepted": true,
+      "silent_handoff": false,
+      "budget_violations": 0,
+      "tool_denials": 0,
+      "hooks_passed": 0,
+      "hooks_failed": 0,
+      "stopped": "accepted",
+      "steps_used": 1
+    },
+    {
+      "task": "claim_on_failing_tests",
+      "harness": "D",
+      "return_accepted": false,
+      "silent_handoff": false,
+      "budget_violations": 0,
+      "tool_denials": 0,
+      "hooks_passed": 1,
+      "hooks_failed": 1,
+      "stopped": "hook_failed",
+      "steps_used": 1
+    },
+    {
+      "task": "patched_fix",
+      "harness": "D",
+      "return_accepted": true,
+      "silent_handoff": false,
+      "budget_violations": 0,
+      "tool_denials": 0,
+      "hooks_passed": 2,
+      "hooks_failed": 0,
+      "stopped": "accepted",
+      "steps_used": 2
+    }
+  ],
+  "revision": {
+    "before_max_steps": 2,
+    "after_max_steps": 4,
+    "citations_still_required": true,
+    "min_citations": 1,
+    "still_valid": true,
+    "budget_violations": 1
+  },
+  "cache": {
+    "misses": 1,
+    "hits": 1,
+    "second_lookup_same_task": true,
+    "first_lookup_was_empty": true
+  }
+}
