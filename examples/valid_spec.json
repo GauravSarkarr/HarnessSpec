@@ -1,0 +1,73 @@
+{
+  "spec_version": "0.1",
+  "task_id": "off-by-one",
+  "goal": {
+    "statement": "Make add return the sum of its arguments.",
+    "acceptance_tests": [
+      {
+        "id": "suite",
+        "command": "unittest"
+      }
+    ]
+  },
+  "context": {
+    "include": [
+      "src",
+      "tests"
+    ],
+    "exclude": []
+  },
+  "tools": [
+    {
+      "name": "read_file",
+      "permission": "read",
+      "paths": [
+        "src",
+        "tests"
+      ]
+    },
+    {
+      "name": "write_file",
+      "permission": "write",
+      "paths": [
+        "src"
+      ]
+    }
+  ],
+  "budgets": {
+    "max_steps": 6,
+    "max_tokens": 2000,
+    "max_seconds": 30
+  },
+  "stop": {
+    "conditions": [
+      "acceptance_passed",
+      "budget_exhausted",
+      "hook_failed",
+      "return_rejected"
+    ],
+    "on_exhaust": "escalate",
+    "max_escalations": 1
+  },
+  "verification": {
+    "hooks": [
+      {
+        "kind": "test",
+        "command": "unittest"
+      },
+      {
+        "kind": "ast",
+        "command": "ast.parse"
+      }
+    ]
+  },
+  "return_contract": {
+    "require_citations": true,
+    "require_test_output": true,
+    "min_citations": 1
+  },
+  "model": {
+    "tier": "7-14B",
+    "name": "fixture-small"
+  }
+}

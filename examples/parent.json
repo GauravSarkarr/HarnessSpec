@@ -1,0 +1,42 @@
+{
+  "tools": {
+    "read_file": {
+      "permission": "read",
+      "paths": [
+        "src",
+        "tests",
+        "README.md"
+      ]
+    },
+    "write_file": {
+      "permission": "write",
+      "paths": [
+        "src"
+      ]
+    },
+    "list_dir": {
+      "permission": "read",
+      "paths": [
+        "."
+      ]
+    },
+    "run_tests": {
+      "permission": "exec",
+      "paths": [
+        "tests"
+      ]
+    }
+  },
+  "context_paths": [
+    "src",
+    "tests",
+    "README.md"
+  ],
+  "max_steps": 30,
+  "max_tokens": 8000,
+  "max_seconds": 120,
+  "allowed_tiers": [
+    "7-14B",
+    "24-30B"
+  ]
+}

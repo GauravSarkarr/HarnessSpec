@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.edu/harnessspec/v0.1/harnessspec.schema.json",
+  "title": "HarnessSpec",
+  "description": "Typed harness for one delegated coding subagent. The eight protocol fields are goal, context, tools, budgets, stop, verification, return_contract, and model. spec_version and task_id are the envelope.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version",
+    "task_id",
+    "goal",
+    "context",
+    "tools",
+    "budgets",
+    "stop",
+    "verification",
+    "return_contract",
+    "model"
+  ],
+  "properties": {
+    "spec_version": { "const": "0.1" },
+    "task_id": { "type": "string", "minLength": 1 },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "acceptance_tests"],
+      "properties": {
+        "statement": { "type": "string", "minLength": 1 },
+        "acceptance_tests": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "command"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "command": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include", "exclude"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "exclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "permission", "paths"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "permission": { "enum": ["read", "write", "exec"] },
+          "paths": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_steps", "max_tokens", "max_seconds"],
+      "properties": {
+        "max_steps": { "type": "integer", "minimum": 1 },
+        "max_tokens": { "type": "integer", "minimum": 1 },
+        "max_seconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "stop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conditions", "on_exhaust", "max_escalations"],
+      "properties": {
+        "conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "acceptance_passed",
+              "budget_exhausted",
+              "hook_failed",
+              "return_rejected",
+              "escalate"
+            ]
+          }
+        },
+        "on_exhaust": { "enum": ["stop", "escalate"] },
+        "max_escalations": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hooks"],
+      "properties": {
+        "hooks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "command"],
+            "properties": {
+              "kind": { "enum": ["test", "lint", "ast"] },
+              "command": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "return_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["require_citations", "require_test_output", "min_citations"],
+      "properties": {
+        "require_citations": { "type": "boolean" },
+        "require_test_output": { "type": "boolean" },
+        "min_citations": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tier", "name"],
+      "properties": {
+        "tier": { "enum": ["7-14B", "24-30B"] },
+        "name": { "type": "string", "minLength": 1 },
+        "digest": { "type": "string" }
+      }
+    }
+  }
+}
