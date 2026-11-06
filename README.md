@@ -2,7 +2,7 @@
 
 Typed protocol for an orchestrator to design a subagent harness, and a compiler that checks the design before the subagent runs.
 
-This repository is the mid-submission snapshot for CS6.403 AutoSE, Monsoon 2026. The registered proposal is `docs/proposal.pdf` (21 October 2026). The four-page progress report is `docs/mid_submission_progress_report.pdf`.
+This repository is the mid-submission snapshot for CS6.403 AutoSE, Monsoon 2026. The registered proposal is `docs/proposal.pdf` (21 October 2026). The four-page progress report is `docs/mid_submission_progress_report.pdf`. Its source is `docs/mid_submission.tex`.
 
 Registered proposal author: Syed Affan Daimi, M.S. CS, IIIT Hyderabad.
 

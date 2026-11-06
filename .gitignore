@@ -4,3 +4,8 @@ __pycache__/
 .pytest_cache/
 pilot/tmp/
 .DS_Store
+docs/*.log
+docs/*.aux
+docs/*.out
+docs/*.xdv
+docs/mid_submission.pdf
