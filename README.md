@@ -26,9 +26,10 @@ Python 3.10 or newer. No third-party packages.
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 PYTHONPATH=src python3 pilot/run_pilot.py
 PYTHONPATH=src python3 -m harnessspec examples/valid_spec.json examples/parent.json
+PYTHONPATH=src python3 -m harnessspec --json examples/invalid_spec.json examples/parent.json
 ```
 
-The unit test reads `pilot/results.json` and fails if a fresh pilot run disagrees with it.
+The unit test reads `pilot/results.json` and fails if a fresh pilot run disagrees with it. `tests/test_validator.py` has one test per validator rule. The `--json` run is expected to exit with code 1 and list typed errors for `examples/invalid_spec.json`.
 
 ## Layout
 
@@ -36,6 +37,8 @@ The unit test reads `pilot/results.json` and fails if a fresh pilot run disagree
 | --- | --- |
 | `schema/harnessspec.schema.json` | Protocol artifact |
 | `src/harnessspec/` | Validator, repair, runtime, return gate, revision |
+| `examples/` | Parent capability card, one valid spec (harness D), one invalid spec |
+| `tests/` | Protocol, repair, and pilot-snapshot tests; one test per validator rule |
 | `fixtures/off_by_one/` | One function whose test fails until `src/app.py` is patched |
 | `pilot/results.json` | Fixture measurements cited by the progress report |
 | `docs/AI_USE.md` | Tool log required by the proposal |
