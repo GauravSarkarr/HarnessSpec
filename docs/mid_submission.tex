@@ -159,6 +159,8 @@ The four designers are named here so the later sections can use the letters. Des
 
 The validator is a function of the spec and the parent card. It returns a sorted list of typed errors. It does not read a clock and does not call a model. \texttt{schema/harnessspec.schema.json} is the interchange description of the same object. The Python validator is the check the runtime executes. A unit test requires the two descriptions to require the same top-level fields.
 
+Each validator rule also has its own test, run against \texttt{examples/parent.json}: a missing field, an unknown tool, a permission above the parent, a budget above the parent, a context path that leaves the workspace, a hook command off the allowlist, a tier the card does not list, and a duplicate tool. Each test checks the error code and the field path. \texttt{examples/invalid\_spec.json} combines an unknown tool, three budgets above the parent, and the include path \texttt{../secrets.txt}. The validator returns five errors for it. With \texttt{-{}-json}, the command line prints the verdict as an object with \texttt{valid} and \texttt{errors}, the form an orchestrator reads back during repair.
+
 Repair consumes that error list and writes a new spec. It runs for at most three rounds and stops earlier when a round leaves the spec unchanged. Repair may delete an unknown field, drop an unknown tool, lower a permission to the parent grant, clamp a budget to the parent card, and supply a missing budget, stop rule, hook list, or return contract from a fixed default. The default return contract requires citations and test output, and the default stop rule escalates when the budget is exhausted. Repair does not write goal text, an acceptance test, or a context path. Those three items are the statement of the task. A default would put words in the spec that no writer supplied. The parent card used for the corpus grants \texttt{read\_file} (read on \texttt{src}, \texttt{tests}, and \texttt{README.md}), \texttt{write\_file} (write on \texttt{src}), \texttt{list\_dir} (read on the workspace), and \texttt{run\_tests} (exec on \texttt{tests}), with 30 steps, 8000 tokens, 120 seconds, and both model tiers.
 
 \begin{table}[H]
@@ -260,7 +262,7 @@ H1 fails if D trails A by more than 5 points. H2 fails if D's silent-handoff rat
 
 The implementation is at \url{https://github.com/GauravSarkarr/HarnessSpec}.
 
-The commits of 5 November 2026, in build order, are \texttt{5ec1ef5} (schema, path rules, and the parent card), \texttt{e3ea1db} (validator), \texttt{47c8a7a} (repair), \texttt{aca97ab} (runtime, hooks, and the return gate), \texttt{02c1967} (designers A and C, and revision), \texttt{a60e33e} (fixture pilot and the test that re-runs it), and \texttt{aa8204d} (README and the AI-use log).
+The commits of 5 November 2026, in build order, are \texttt{5ec1ef5} (schema, path rules, and the parent card), \texttt{e3ea1db} (validator), \texttt{47c8a7a} (repair), \texttt{aca97ab} (runtime, hooks, and the return gate), \texttt{02c1967} (designers A and C, and revision), \texttt{a60e33e} (fixture pilot and the test that re-runs it), and \texttt{aa8204d} (README and the AI-use log). The commits of 6 November 2026 are \texttt{240a596} (one test per validator rule, and the invalid example), \texttt{665d665} (the \texttt{-{}-json} option), and \texttt{aaeb532} (README and the AI-use log).
 
 From a clean checkout, with no installed packages:
 
@@ -269,15 +271,17 @@ From a clean checkout, with no installed packages:
 PYTHONPATH=src python3 -m unittest discover -s tests -v\\
 PYTHONPATH=src python3 pilot/run\_pilot.py\\
 PYTHONPATH=src python3 -m harnessspec \\
-examples/valid\_spec.json examples/parent.json
+examples/valid\_spec.json examples/parent.json\\
+PYTHONPATH=src python3 -m harnessspec -{}-json \\
+examples/invalid\_spec.json examples/parent.json
 \end{flushleft}
 }
 
-\noindent The test suite re-runs the pilot and fails if the committed results differ.
+\noindent The test suite re-runs the pilot and fails if the committed results differ. It runs 22 tests. The last command exits with code 1 and lists the errors for the invalid example.
 
 \noindent The source of this report is \texttt{mid\_submission.tex}.
 
-The proposal requires a log of AI-tool use. On 5 November 2026, Cursor, using Grok 4.7, drafted the milestone implementation and this report. The check is the test command above. No orchestrator model and no subagent model were called. The log is \texttt{AI\_USE.md}.
+The proposal requires a log of AI-tool use. On 5 November 2026, Cursor, using Grok 4.7, drafted the milestone implementation and this report. The check is the test command above. On 6 November 2026, an AI coding assistant helped port the schema-and-validator tests, the invalid example, and the \texttt{-{}-json} option. The check is the same test command. No orchestrator model and no subagent model were called. The log is \texttt{AI\_USE.md}.
 
 \section{Remaining work}
 
