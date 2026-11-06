@@ -1,0 +1,67 @@
+{
+  "spec_version": "0.1",
+  "task_id": "off-by-one",
+  "goal": {
+    "statement": "Make add return the sum of its arguments.",
+    "acceptance_tests": [
+      {
+        "id": "suite",
+        "command": "unittest"
+      }
+    ]
+  },
+  "context": {
+    "include": [
+      "../secrets.txt"
+    ],
+    "exclude": []
+  },
+  "tools": [
+    {
+      "name": "delete_database",
+      "permission": "exec",
+      "paths": [
+        "."
+      ]
+    },
+    {
+      "name": "run_tests",
+      "permission": "exec",
+      "paths": [
+        "tests"
+      ]
+    }
+  ],
+  "budgets": {
+    "max_steps": 100,
+    "max_tokens": 50000,
+    "max_seconds": 5000
+  },
+  "stop": {
+    "conditions": [
+      "acceptance_passed",
+      "budget_exhausted",
+      "hook_failed",
+      "return_rejected"
+    ],
+    "on_exhaust": "escalate",
+    "max_escalations": 1
+  },
+  "verification": {
+    "hooks": [
+      {
+        "kind": "test",
+        "command": "unittest"
+      }
+    ]
+  },
+  "return_contract": {
+    "require_citations": true,
+    "require_test_output": true,
+    "min_citations": 1
+  },
+  "model": {
+    "tier": "7-14B",
+    "name": "fixture-small"
+  }
+}
