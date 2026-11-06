@@ -4,11 +4,14 @@ Ported from the Member 1 schema-and-validator starter. The checks are the same
 ideas, written against this repository's validator and error codes.
 """
 
+import contextlib
 import copy
+import io
 import json
 import unittest
 from pathlib import Path
 
+from harnessspec.__main__ import main
 from harnessspec.parent import CapabilityCard
 from harnessspec.validator import validate
 
@@ -96,6 +99,37 @@ class ValidatorRuleTests(unittest.TestCase):
         spec = copy.deepcopy(self.valid_spec)
         spec["tools"].append(copy.deepcopy(spec["tools"][0]))
         self.assertIn(("tool.duplicate", "tools[2].name"), self.pairs_for(spec))
+
+
+class CliTests(unittest.TestCase):
+    def run_cli(self, *args):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            status = main(["harnessspec", *args])
+        return status, out.getvalue()
+
+    def test_json_output_for_invalid_spec(self):
+        status, out = self.run_cli(
+            "--json", str(EXAMPLES / "invalid_spec.json"), str(EXAMPLES / "parent.json")
+        )
+        verdict = json.loads(out)
+        self.assertEqual(status, 1)
+        self.assertFalse(verdict["valid"])
+        self.assertIn(
+            {"code": "tool.unknown", "path": "tools[0].name", "message": "unknown tool delete_database"},
+            verdict["errors"],
+        )
+
+    def test_json_output_for_valid_spec(self):
+        status, out = self.run_cli(
+            "--json", str(EXAMPLES / "valid_spec.json"), str(EXAMPLES / "parent.json")
+        )
+        self.assertEqual(status, 0)
+        self.assertEqual(json.loads(out), {"valid": True, "errors": []})
+
+    def test_plain_output_is_unchanged(self):
+        status, out = self.run_cli(str(EXAMPLES / "valid_spec.json"), str(EXAMPLES / "parent.json"))
+        self.assertEqual((status, out), (0, "valid\n"))
 
 
 if __name__ == "__main__":
